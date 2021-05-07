@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./perfect-scrollbar-1.4.0/css/perfect-scrollbar.css" />
+    <script src="./perfect-scrollbar-1.4.0/dist/perfect-scrollbar.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <title>Excel Clone</title>
@@ -83,35 +84,14 @@
         <div class="data-container">
             <div id="select-all"></div>
             <div id="columns">
-                <script>
-                    for (let i = 1; i <= 30; i++) {
-                        let n = i;
-                        let ans = "";
-                        while (n > 0) {
-                            n--;
-                            let r = n % 26;
-                            n = n / 26;
-                            let t = String.fromCharCode(65+r);
-                            ans = t+ans;
-                        }
-                        console.log(ans);
-                        let s = "";
-                        if(ans.charAt(0) == '@'){
-                            s = ans.substr(1);
-                        }else{
-                            s = ans;
-                        }
-                        let div = $("<div></div>").text(s+" ");
-                        div.addClass("column-name");
-                        $("#columns").append(div);
-                    }
-                </script>
             </div>
             <div id="rows"></div>
-            <div id="cells"></div>
+            <div id="cells">
+            </div>
         </div>
         <div class="sheet-bar"></div>
     </div>
+<script src="script.js"></script>
 </body>
 
 </html>
