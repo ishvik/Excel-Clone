@@ -61,17 +61,17 @@ function getTopLeftBottomRightCell(rowId, colId) {
     let BottomCell = $(`#row-${rowId + 1}-col-${colId}`);
     let leftCell = $(`#row-${rowId}-col-${colId - 1}`);
     let rightCell = $(`#row-${rowId}-col-${colId + 1}`);
-    return [topCell,BottomCell,leftCell,rightCell];
+    return [topCell, BottomCell, leftCell, rightCell];
 }
 
 $(".input-cell").click(function (e) {
     let [rowId, colId] = getRowCol(this);
-    let [topCell,bottomCell,leftCell,rightCell] = getTopLeftBottomRightCell(rowId,colId);
-    if($(this).hasClass("selected") && e.ctrlKey){
-        unselectCell(this,e,topCell,bottomCell,leftCell,rightCell);
+    let [topCell, bottomCell, leftCell, rightCell] = getTopLeftBottomRightCell(rowId, colId);
+    if ($(this).hasClass("selected") && e.ctrlKey) {
+        unselectCell(this, e, topCell, bottomCell, leftCell, rightCell);
     }
-    else{
-        selectCell(this,e,topCell,bottomCell,leftCell,rightCell);
+    else {
+        selectCell(this, e, topCell, bottomCell, leftCell, rightCell);
     }
 });
 
@@ -119,22 +119,107 @@ function selectCell(currcell, e, topCell, bottomCell, leftCell, rightCell) {
     $(currcell).addClass("selected");
 }
 
-function unselectCell(currcell,e,topCell,bottomCell,leftCell,rightCell){
-    if($(currcell).hasClass("top-selected")){
-        topCell.removeClass("bottom-selected");
+function unselectCell(currcell, e, topCell, bottomCell, leftCell, rightCell) {
+    if ($(curr).attr("contenteditable", "false")) {
+        if ($(currcell).hasClass("top-selected")) {
+            topCell.removeClass("bottom-selected");
+        }
+
+        if ($(currcell).hasClass("bottom-selected")) {
+            bottomCell.removeClass("top-selected");
+        }
+
+        if ($(currcell).hasClass("left-selected")) {
+            leftCell.removeClass("right-selected");
+        }
+
+        if ($(currcell).hasClass("right-selected")) {
+            rightCell.removeClass("left-selected");
+        }
+        $(currcell).removeClass("selected top-selected bottom-selected left-selected right-selected");
     }
 
-    if($(currcell).hasClass("bottom-selected")){
-        bottomCell.removeClass("top-selected");
-    }
-
-    if($(currcell).hasClass("left-selected")){
-        leftCell.removeClass("right-selected");
-    }
-
-    if($(currcell).hasClass("right-selected")){
-        rightCell.removeClass("left-selected");
-    }
-
-    $(currcell).removeClass("selected top-selected bottom-selected left-selected right-selected");
 }
+
+let startcellSelected = false;
+let startCell = {};
+let endCell = {};
+let scrollXRstart = false;
+let scrollXLstart = false;
+$(".input-cell").mousemove(function (e) {
+    e.preventDefault();
+    if (e.buttons == 1) {
+        if (e.pageX > ($(window).width() - 10) && !scrollXRstart) {
+            scrollXR();
+        }else if(e.pageX < (10) && !scrollXLstart){
+            scrollXL();
+        }
+        if (!startcellSelected) {
+            let [rowId, colId] = getRowCol(this);
+            startCell = { rowId: rowId, colId: colId };
+            selectAll(startCell, startCell);
+            startcellSelected = true;
+        }
+    } else {
+        startcellSelected = false;
+    }
+})
+
+$(".input-cell").mouseenter(function (e) {
+    if (e.buttons == 1) {
+        if(e.pageX < ($(window).width() - 10) && scrollXRstart){
+            clearInterval(scrollXRInterval);
+            scrollXRstart = false;
+        }
+
+        if(e.pageX > 10 && scrollXLstart){
+            clearInterval(scrollXLInterval);
+            scrollXLstart = false;
+        }
+        let [rowId, colId] = getRowCol(this);
+        endCell = { rowId: rowId, colId: colId };
+        selectAll(startCell, endCell);
+    }
+})
+function selectAll(start, end) {
+    $(".input-cell.selected").removeClass("selected top-selected bottom-selected left-selected right-selected")
+    for (let i = Math.min(start.rowId, end.rowId); i <= Math.max(start.rowId, end.rowId); i++) {
+        for (let j = Math.min(start.colId, end.colId); j <= Math.max(start.colId, end.colId); j++) {
+            let [topCell, bottomCell, leftCell, rightCell] = getTopLeftBottomRightCell(i, j);
+            selectCell($(`#row-${i}-col-${j}`)[0], { "ctrlKey": true }, topCell, bottomCell, leftCell, rightCell);
+        }
+    }
+}
+let scrollXRInterval;
+function scrollXR(){
+    scrollXRstart = true;
+    scrollXRInterval = setInterval(() =>{
+        $("#cells").scrollLeft($("#cells").scrollLeft()+100)
+    },100);
+}
+
+let scrollXLInterval;
+function scrollXL(){
+    scrollXLstart = true;
+    scrollXLInterval = setInterval(() =>{
+        $("#cells").scrollLeft($("#cells").scrollLeft()-100)
+    },100);
+}
+
+$(".data-container").mousemove(function(e){
+    e.preventDefault();
+    if (e.buttons == 1) {
+        if (e.pageX > ($(window).width() - 10) && !scrollXRstart) {
+            scrollXR();
+        }else if(e.pageX < (10) && !scrollXLstart){
+            scrollXL();
+        }
+    }
+})
+
+$(".data-container").mouseup(function(e){
+    clearInterval(scrollXRInterval);
+    clearInterval(scrollXLInterval);
+    scrollXRstart = false;
+    scrollXLstart = false;
+})
