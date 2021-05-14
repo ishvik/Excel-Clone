@@ -1,7 +1,7 @@
 
 body {
     margin: 0;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 * {
@@ -173,7 +173,7 @@ body {
     width: calc(100vw - 25px);
     height: calc(76vh - 25px);
     border: 1px solid lightgray;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .column-name {
@@ -183,59 +183,75 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-.row-name{
+.row-name {
     min-height: 25px;
     height: 25px;
     border-bottom: 1px solid lightgray;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-.cell-row{
+.cell-row {
     display: flex;
 }
 
-.input-cell{
+.input-cell {
     min-width: 100px;
-    min-height: 25px;
     width: 100px;
+    min-height: 25px;
     height: 25px;
     border-bottom: 1px solid lightgray;
     border-right: 1px solid lightgray;
     padding-left: 3px;
     padding-right: 3px;
     font-size: 14px;
-    overflow: hidden;
     font-family: Noto Sans;
-    align-items: center;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding-top: 1px;
     justify-content: center;
     outline-color: #217346;
 }
 
-.input-cell.selected{
+.input-cell.selected {
     border: 2px solid #217346;
 }
 
-.input-cell.top-selected{
+.input-cell.top-selected {
     border-top: none;
 }
 
-.input-cell.bottom-selected{
+.input-cell.bottom-selected {
     border-bottom: 1px solid lightgray;
 }
 
-.input-cell.left-selected{
+.input-cell.left-selected {
     border-left: none;
 }
 
-.input-cell.right-selected{
+.input-cell.right-selected {
     border-right: 1px solid lightgray;
+}
+
+.menu-icon.selected {
+    background-color: lightgray;
+}
+
+.input-cell:hover {
+    cursor: cell;
+}
+
+#fill-color {
+    border-bottom: 4px solid #fff;
+    padding-bottom: 2px;
+}
+
+#text-color {
+    border-bottom: 4px solid #444;
+    padding-bottom: 2px;
 }
